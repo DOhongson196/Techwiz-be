@@ -5,6 +5,7 @@ import com.nosz.projectsem2be.dto.CategoryDto;
 import com.nosz.projectsem2be.entity.Category;
 import com.nosz.projectsem2be.service.CategoryService;
 import com.nosz.projectsem2be.service.MapValidationErrorService;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -25,6 +26,8 @@ public class CategoryController {
     @Autowired
     MapValidationErrorService mapValidationErrorService;
 
+
+
     @PostMapping
     public ResponseEntity<?> createCategory(@Valid  @RequestBody CategoryDto dto,
                                             BindingResult bindingResult){
@@ -37,6 +40,8 @@ public class CategoryController {
         return new ResponseEntity<>(dto, HttpStatus.CREATED);
     }
 
+
+
     @PatchMapping("/{id}")
     public ResponseEntity<?> updateCategory(@PathVariable("id") Long id,@RequestBody CategoryDto dto){
 
@@ -45,10 +50,13 @@ public class CategoryController {
         return new ResponseEntity<>(dto, HttpStatus.CREATED);
     }
 
+
+    @RolesAllowed({"ROLE_CUSTOMER", "ROLE_EDITOR","ROLE_ADMIN"})
     @GetMapping()
     public ResponseEntity<?> getCategories(){
         return new ResponseEntity<>(categoryService.findAll(),HttpStatus.OK);
     }
+
 
     @GetMapping("/page")
     public ResponseEntity<?> getCategories(
@@ -57,10 +65,12 @@ public class CategoryController {
         return new ResponseEntity<>(categoryService.findAll(pageable),HttpStatus.OK);
     }
 
+
     @GetMapping("/{id}")
     public ResponseEntity<?> getCategories(@PathVariable("id") Long id){
         return new ResponseEntity<>(categoryService.findById(id),HttpStatus.OK);
     }
+
 
     @DeleteMapping ("/{id}")
     public ResponseEntity<?> deleteCategory(@PathVariable("id") Long id){

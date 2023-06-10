@@ -1,5 +1,5 @@
 package com.nosz.projectsem2be.entity;
 
 public enum RoleName {
-    USER,ADMIN,EDIT
+    ROLE_ADMIN,ROLE_EDITOR,ROLE_CUSTOMER
 }

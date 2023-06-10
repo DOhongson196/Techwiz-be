@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
+
 @Component
 public class JwtProvider {
     private  static  final Logger logger = LoggerFactory.getLogger(JwtProvider.class);
@@ -19,7 +20,7 @@ public class JwtProvider {
         return Jwts.builder()
                 .setSubject(userPrinciple.getEmail())
                 .setIssuedAt(new Date())
-                .claim("roles",userPrinciple.getAuthorities().toString())
+                .claim("roles",userPrinciple.getAuthorities())
                 .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration))
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
@@ -46,14 +47,4 @@ public class JwtProvider {
         return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
     }
 
-//    public String getSubject(String token) {
-//        return parseClaims(token).getSubject();
-//    }
-//
-//    public Claims parseClaims(String token){
-//        return Jwts.parser()
-//                .setSigningKey(jwtSecret)
-//                .parseClaimsJws(token)
-//                .getBody();
-//    }
 }

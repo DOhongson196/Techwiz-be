@@ -57,7 +57,7 @@ public class UserService {
         user.setName(name);
         user.setAuthProvider(authProvider);
         Set<Role> roles = new HashSet<>();
-        Role userRole = roleService.finByName(RoleName.USER).orElseThrow(
+        Role userRole = roleService.finByName(RoleName.ROLE_CUSTOMER).orElseThrow(
                 () -> new RuntimeException("Role not found")
         );
         roles.add(userRole);

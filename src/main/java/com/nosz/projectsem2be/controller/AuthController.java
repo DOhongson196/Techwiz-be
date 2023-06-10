@@ -32,6 +32,7 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @CrossOrigin(origins= {"*"}, maxAge = 4800, allowCredentials = "false" )
 @RequestMapping("/api/v1/auth")
@@ -74,19 +75,19 @@ public class AuthController {
 
             strRoles.forEach(role -> {
                 switch (role) {
-                    case "admin" -> {
-                        Role adminRole = roleService.finByName(RoleName.ADMIN).orElseThrow(
+                    case "ADMIN" -> {
+                        Role adminRole = roleService.finByName(RoleName.ROLE_ADMIN).orElseThrow(
                                 () -> new RuntimeException("Role not found")
                         );
                         roles.add(adminRole);
                     }
-                    case "edit" -> {
-                        Role editRole = roleService.finByName(RoleName.EDIT).orElseThrow(
+                    case "EDIT" -> {
+                        Role editRole = roleService.finByName(RoleName.ROLE_EDITOR).orElseThrow(
                                 () -> new RuntimeException("Role not found"));
                         roles.add(editRole);
                     }
                     default -> {
-                        Role userRole = roleService.finByName(RoleName.USER).orElseThrow(
+                        Role userRole = roleService.finByName(RoleName.ROLE_CUSTOMER).orElseThrow(
                                 () -> new RuntimeException("Role not found")
                         );
                         roles.add(userRole);
@@ -96,7 +97,7 @@ public class AuthController {
             user.setRoles(roles);
         } else {
             Set<Role> roles = new HashSet<>();
-            Role userRole = roleService.finByName(RoleName.USER).orElseThrow(
+            Role userRole = roleService.finByName(RoleName.ROLE_CUSTOMER).orElseThrow(
                     () -> new RuntimeException("Role not found")
             );
             roles.add(userRole);
