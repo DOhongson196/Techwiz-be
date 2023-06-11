@@ -66,7 +66,6 @@ public class ProductController {
         return  new ResponseEntity<>("Product id " + id + " was deleted",HttpStatus.OK);
     }
 
-    @Secured({"ROLE_ADMIN"})
     @PostMapping(value = "/images/one",
     consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,
     MediaType.APPLICATION_FORM_URLENCODED_VALUE,
@@ -84,7 +83,7 @@ public class ProductController {
     }
 
 
-    @Secured({"ROLE_CUSTOMER", "ROLE_EDITOR","ROLE_ADMIN"})
+
     @GetMapping("/images/{filename:.+}")
     public ResponseEntity<?> downloadFile(@PathVariable String filename, HttpServletRequest request){
         Resource resource = fileStorageService.loadProductImageFileAsResource(filename);

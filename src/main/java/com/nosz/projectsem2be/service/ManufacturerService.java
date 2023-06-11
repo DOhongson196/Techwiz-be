@@ -26,9 +26,8 @@ public class ManufacturerService {
     private ProductRepository productRepository;
 
     public Manufacturer insertManufacturer(ManufacturerDto dto){
-        List<?> foundedList = manufacturerRepository.findByNameContainsIgnoreCase(dto.getName());
 
-        if(foundedList.size()>0){
+        if(manufacturerRepository.existsByName(dto.getName())){
             throw new ManufacturerException("Manufacturer name is existed");
         }
 

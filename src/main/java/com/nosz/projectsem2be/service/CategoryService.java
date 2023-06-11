@@ -2,7 +2,6 @@ package com.nosz.projectsem2be.service;
 
 import com.nosz.projectsem2be.dto.CategoryDto;
 import com.nosz.projectsem2be.entity.Category;
-import com.nosz.projectsem2be.entity.CategoryStatus;
 import com.nosz.projectsem2be.exception.CategoryException;
 import com.nosz.projectsem2be.respository.CategoryRepository;
 import com.nosz.projectsem2be.respository.ProductRepository;
@@ -23,9 +22,7 @@ public class CategoryService {
     private ProductRepository productRepository;
 
     public Category save(CategoryDto dto) {
-        List<?> foundedList = categoryRepository.findByNameContainsIgnoreCase(dto.getName());
-
-        if(foundedList.size()>0){
+        if(categoryRepository.existsByName(dto.getName())){
             throw new CategoryException("Category name is existed");
         }
         Category entity = new Category();
@@ -74,8 +71,6 @@ public class CategoryService {
         Optional<Category> found = this.findById(id);
         if(found.isPresent()){
             if(productRepository.existsByCategory_Id(id)){
-                found.get().setStatus(CategoryStatus.Invisible);
-                categoryRepository.save(found.get());
                 throw new CategoryException("Category has related products cannot remove,changed its status In-Visible");
             }
             categoryRepository.delete(found.get());

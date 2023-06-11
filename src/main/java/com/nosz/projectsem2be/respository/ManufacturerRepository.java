@@ -12,7 +12,9 @@ public interface ManufacturerRepository extends JpaRepository<Manufacturer, Long
 
     List<Manufacturer> findByNameContainsIgnoreCase(String name);
 
-    List<Manufacturer> findByIdNotAndNameContainsIgnoreCase(Long id, String name);
+    boolean existsByName(String name);
+
+
 
 
 }

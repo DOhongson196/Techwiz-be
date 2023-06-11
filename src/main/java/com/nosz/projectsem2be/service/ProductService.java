@@ -38,9 +38,8 @@ public class ProductService {
 
     @Transactional(rollbackFor = Exception.class)
     public ProductDto insertProduct(ProductDto dto){
-        List<?> foundedList = productRepository.findByNameContainsIgnoreCase(dto.getName());
 
-        if(foundedList.size()>0){
+        if(productRepository.existsByName(dto.getName())){
             throw new ProductException("Product name is existed");
         }
         Product entity = new Product();

@@ -79,7 +79,6 @@ public class ManufacturerController {
         return new ResponseEntity<>(dto, HttpStatus.CREATED);
     }
 
-    @Secured({"ROLE_CUSTOMER", "ROLE_EDITOR","ROLE_ADMIN"})
     @GetMapping("/logo/{filename:.+}")
     public ResponseEntity<?> downloadFile(@PathVariable String filename, HttpServletRequest request){
         Resource resource = fileStorageService.loadLogoFileAsResource(filename);
