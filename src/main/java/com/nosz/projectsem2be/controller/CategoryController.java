@@ -5,7 +5,6 @@ import com.nosz.projectsem2be.dto.CategoryDto;
 import com.nosz.projectsem2be.entity.Category;
 import com.nosz.projectsem2be.service.CategoryService;
 import com.nosz.projectsem2be.service.MapValidationErrorService;
-import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -13,6 +12,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,7 +27,7 @@ public class CategoryController {
     MapValidationErrorService mapValidationErrorService;
 
 
-
+    @Secured({"ROLE_ADMIN"})
     @PostMapping
     public ResponseEntity<?> createCategory(@Valid  @RequestBody CategoryDto dto,
                                             BindingResult bindingResult){
@@ -41,7 +41,7 @@ public class CategoryController {
     }
 
 
-
+    @Secured({"ROLE_ADMIN"})
     @PatchMapping("/{id}")
     public ResponseEntity<?> updateCategory(@PathVariable("id") Long id,@RequestBody CategoryDto dto){
 
@@ -51,13 +51,13 @@ public class CategoryController {
     }
 
 
-    @RolesAllowed({"ROLE_CUSTOMER", "ROLE_EDITOR","ROLE_ADMIN"})
+    @Secured({"ROLE_CUSTOMER", "ROLE_EDITOR","ROLE_ADMIN"})
     @GetMapping()
     public ResponseEntity<?> getCategories(){
         return new ResponseEntity<>(categoryService.findAll(),HttpStatus.OK);
     }
 
-
+    @Secured({"ROLE_CUSTOMER", "ROLE_EDITOR","ROLE_ADMIN"})
     @GetMapping("/page")
     public ResponseEntity<?> getCategories(
             @PageableDefault(size = 5, sort = "name", direction = Sort.Direction.ASC)
@@ -65,13 +65,13 @@ public class CategoryController {
         return new ResponseEntity<>(categoryService.findAll(pageable),HttpStatus.OK);
     }
 
-
+    @Secured({"ROLE_CUSTOMER", "ROLE_EDITOR","ROLE_ADMIN"})
     @GetMapping("/{id}")
     public ResponseEntity<?> getCategories(@PathVariable("id") Long id){
         return new ResponseEntity<>(categoryService.findById(id),HttpStatus.OK);
     }
 
-
+    @Secured({"ROLE_ADMIN"})
     @DeleteMapping ("/{id}")
     public ResponseEntity<?> deleteCategory(@PathVariable("id") Long id){
         categoryService.deleteById(id);

@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +25,8 @@ public class InvoiceController {
     InvoiceService invoiceService;
     @Autowired
     private MapValidationErrorService mapValidationErrorService;
+
+    @Secured({"ROLE_ADMIN"})
     @PostMapping
     public ResponseEntity<?> placeOrder(@Valid  @RequestBody InvoiceDto invoiceDto, BindingResult bindingResult) {
         ResponseEntity<?> responseEntity = mapValidationErrorService.mapValidationFields(bindingResult);
@@ -34,23 +37,27 @@ public class InvoiceController {
         return new ResponseEntity<>("Place order success!", HttpStatus.OK);
     }
 
+    @Secured({"ROLE_CUSTOMER", "ROLE_EDITOR","ROLE_ADMIN"})
     @GetMapping("/page")
     public ResponseEntity<?> getAllOrder(@PageableDefault(size = 5,sort = "id", direction = Sort.Direction.ASC)
                                               Pageable pageable){
         return new ResponseEntity<>(invoiceService.getAllOrder(pageable),HttpStatus.OK);
     }
 
+    @Secured({"ROLE_CUSTOMER", "ROLE_EDITOR","ROLE_ADMIN"})
     @GetMapping("/{id}")
     public ResponseEntity<?> getOrderById(@PathVariable("id") Long id){
         return new ResponseEntity<>(invoiceService.findById(id),HttpStatus.OK);
     }
 
+    @Secured({"ROLE_CUSTOMER", "ROLE_EDITOR","ROLE_ADMIN"})
     @GetMapping("/page/user")
     public ResponseEntity<?> getOrderByUser(@PageableDefault(size = 5,sort = "id", direction = Sort.Direction.ASC)
                                          Pageable pageable){
         return new ResponseEntity<>(invoiceService.getOrderByUser(pageable),HttpStatus.OK);
     }
 
+    @Secured({"ROLE_CUSTOMER", "ROLE_EDITOR","ROLE_ADMIN"})
     @GetMapping("/page/order/{id}")
     public ResponseEntity<?> getOrderDetailByOrderId(@PathVariable("id") Long id,
                                                      @PageableDefault(size = 5,sort = "id", direction = Sort.Direction.ASC)
@@ -58,12 +65,14 @@ public class InvoiceController {
         return new ResponseEntity<>(invoiceService.getOrderDetailByOrderId(pageable,id),HttpStatus.OK);
     }
 
+    @Secured({"ROLE_ADMIN"})
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteOrder(@PathVariable("id") Long id){
         invoiceService.deleteInvoice(id);
         return new ResponseEntity<>("Order id " + id + " was deleted",HttpStatus.OK);
     }
 
+    @Secured({"ROLE_ADMIN"})
     @PatchMapping("/{id}")
     public ResponseEntity<?> updateInvoice(@Valid @PathVariable Long id,
                                            @RequestBody InvoiceDto invoiceDto,
@@ -75,6 +84,7 @@ public class InvoiceController {
         return new ResponseEntity<>(invoiceService.updateOrder(id,invoiceDto),HttpStatus.OK);
     }
 
+    @Secured({"ROLE_CUSTOMER", "ROLE_EDITOR","ROLE_ADMIN"})
     @GetMapping("/find1")
     public ResponseEntity<?> getInvoiceByName(@RequestParam("query") String query,
                                                    @PageableDefault(size = 5, sort = "id",direction = Sort.Direction.ASC)
@@ -82,6 +92,7 @@ public class InvoiceController {
         return new ResponseEntity<>(invoiceService.getOrderByUserEmail(query,pageable),HttpStatus.OK);
     }
 
+    @Secured({"ROLE_CUSTOMER", "ROLE_EDITOR","ROLE_ADMIN"})
     @GetMapping("/find2")
     public ResponseEntity<?> getInvoiceByNameAndInvoiceStatus(@RequestParam("query") String query,
                                                               @RequestParam("status") InvoiceStatus[] status,

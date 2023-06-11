@@ -18,6 +18,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,6 +37,7 @@ public class ProductController {
     @Autowired
     private MapValidationErrorService mapValidationErrorService;
 
+    @Secured({"ROLE_ADMIN"})
     @PostMapping
     public ResponseEntity<?> createProduct(@Valid @RequestBody ProductDto dto, BindingResult bindingResult){
         ResponseEntity<?> responseEntity = mapValidationErrorService.mapValidationFields(bindingResult);
@@ -46,7 +48,7 @@ public class ProductController {
 
         return new ResponseEntity<>(productDto,HttpStatus.CREATED);
     }
-
+    @Secured({"ROLE_ADMIN"})
     @PatchMapping("/{id}")
     public ResponseEntity<?> updateProduct(@Valid @PathVariable Long id,
                                                @RequestBody ProductDto productDto,
@@ -57,11 +59,14 @@ public class ProductController {
         }
         return new ResponseEntity<>(productService.updateProduct(id,productDto),HttpStatus.OK);
     }
+    @Secured({"ROLE_ADMIN"})
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteProduct(@PathVariable Long id){
         productService.deleteProductById(id);
         return  new ResponseEntity<>("Product id " + id + " was deleted",HttpStatus.OK);
     }
+
+    @Secured({"ROLE_ADMIN"})
     @PostMapping(value = "/images/one",
     consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,
     MediaType.APPLICATION_FORM_URLENCODED_VALUE,
@@ -72,12 +77,14 @@ public class ProductController {
         return new ResponseEntity<>(dto,HttpStatus.CREATED);
     }
 
+    @Secured({"ROLE_CUSTOMER", "ROLE_EDITOR","ROLE_ADMIN"})
     @GetMapping()
     public ResponseEntity<?> getProducts(){
         return new ResponseEntity<>(productService.findAll(),HttpStatus.CREATED);
     }
 
 
+    @Secured({"ROLE_CUSTOMER", "ROLE_EDITOR","ROLE_ADMIN"})
     @GetMapping("/images/{filename:.+}")
     public ResponseEntity<?> downloadFile(@PathVariable String filename, HttpServletRequest request){
         Resource resource = fileStorageService.loadProductImageFileAsResource(filename);
@@ -98,12 +105,14 @@ public class ProductController {
                 .body(resource);
     }
 
+    @Secured({"ROLE_ADMIN"})
     @DeleteMapping ("/images/{filename:.+}")
     public ResponseEntity<?> deleteFile(@PathVariable String filename){
         fileStorageService.deleteProductImageFile(filename);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @Secured({"ROLE_CUSTOMER", "ROLE_EDITOR","ROLE_ADMIN"})
     @GetMapping("/find")
     public ResponseEntity<?> getProductBriefByName(@RequestParam("query") String query,
                                         @PageableDefault(size = 5, sort = "name",direction = Sort.Direction.ASC)
@@ -111,12 +120,14 @@ public class ProductController {
         return new ResponseEntity<>(productService.getProductBriefByName(query,pageable),HttpStatus.OK);
     }
 
+    @Secured({"ROLE_CUSTOMER", "ROLE_EDITOR","ROLE_ADMIN"})
     @GetMapping("/brief")
     public ResponseEntity<?> getProductBrief(@PageableDefault(size = 5, sort = "name",direction = Sort.Direction.ASC)
                                                    Pageable pageable){
         return new ResponseEntity<>(productService.getProductBrief(pageable),HttpStatus.OK);
     }
 
+    @Secured({"ROLE_CUSTOMER", "ROLE_EDITOR","ROLE_ADMIN"})
     @GetMapping("/{id}")
     public ResponseEntity<?> getProductByid(@PathVariable Long id){
         return new ResponseEntity<>(productService.getProductById(id),HttpStatus.OK);

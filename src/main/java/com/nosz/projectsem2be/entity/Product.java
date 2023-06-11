@@ -26,6 +26,9 @@ public class Product extends AbstractEntity {
     @Column(name = "view_count")
     private Long viewCount;
 
+    @Column(name = "volume")
+    private Long volume;
+
     @Column(name = "is_featured")
     private Boolean isFeatured;
 
@@ -64,6 +67,7 @@ public class Product extends AbstractEntity {
 
         if(isFeatured == null) isFeatured = false;
         viewCount = 0L;
+        volume = 0L;
     }
 
     @PreUpdate

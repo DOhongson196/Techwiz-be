@@ -19,6 +19,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,6 +36,7 @@ public class ManufacturerController {
     @Autowired
     private MapValidationErrorService mapValidationErrorService;
 
+    @Secured({"ROLE_ADMIN"})
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE,
     MediaType.APPLICATION_FORM_URLENCODED_VALUE,
     MediaType.MULTIPART_FORM_DATA_VALUE},
@@ -54,6 +56,7 @@ public class ManufacturerController {
         return new ResponseEntity<>(dto, HttpStatus.CREATED);
     }
 
+    @Secured({"ROLE_ADMIN"})
     @PatchMapping (
             value = "/{id}",
             consumes = {MediaType.APPLICATION_JSON_VALUE,
@@ -76,6 +79,7 @@ public class ManufacturerController {
         return new ResponseEntity<>(dto, HttpStatus.CREATED);
     }
 
+    @Secured({"ROLE_CUSTOMER", "ROLE_EDITOR","ROLE_ADMIN"})
     @GetMapping("/logo/{filename:.+}")
     public ResponseEntity<?> downloadFile(@PathVariable String filename, HttpServletRequest request){
         Resource resource = fileStorageService.loadLogoFileAsResource(filename);
@@ -96,6 +100,7 @@ public class ManufacturerController {
                 .body(resource);
     }
 
+    @Secured({"ROLE_CUSTOMER", "ROLE_EDITOR","ROLE_ADMIN"})
     @GetMapping
     public ResponseEntity<?> getManufacturers(){
         var list = manufacturerService.findAll();
@@ -107,6 +112,7 @@ public class ManufacturerController {
         return new ResponseEntity<>(newList,HttpStatus.OK);
     }
 
+    @Secured({"ROLE_CUSTOMER", "ROLE_EDITOR","ROLE_ADMIN"})
     @GetMapping("/find")
     public ResponseEntity<?> getManufacturers(@RequestParam("query") String query,
             @PageableDefault(size = 5,sort = "name", direction = Sort.Direction.ASC)
@@ -124,6 +130,7 @@ public class ManufacturerController {
         return new ResponseEntity<>(newPage,HttpStatus.OK);
     }
 
+    @Secured({"ROLE_CUSTOMER", "ROLE_EDITOR","ROLE_ADMIN"})
     @GetMapping("/page")
     public ResponseEntity<?> getManufacturers(@PageableDefault(size = 5,sort = "name", direction = Sort.Direction.ASC)
                                              Pageable pageable){
@@ -137,6 +144,7 @@ public class ManufacturerController {
         return new ResponseEntity<>(newPage,HttpStatus.OK);
     }
 
+    @Secured({"ROLE_CUSTOMER", "ROLE_EDITOR","ROLE_ADMIN"})
     @GetMapping("/{id}")
     public ResponseEntity<?> getManufacturer(@PathVariable Long id){
         var entity = manufacturerService.findById(id);
@@ -146,6 +154,7 @@ public class ManufacturerController {
         return new ResponseEntity<>(dto,HttpStatus.OK);
     }
 
+    @Secured({"ROLE_ADMIN"})
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteManufacturerById(@PathVariable Long id){
         manufacturerService.deleteById(id);

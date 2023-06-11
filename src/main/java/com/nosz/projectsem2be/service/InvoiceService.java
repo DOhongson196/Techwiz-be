@@ -10,10 +10,7 @@ import com.nosz.projectsem2be.exception.CartException;
 import com.nosz.projectsem2be.exception.CategoryException;
 import com.nosz.projectsem2be.exception.InvoiceException;
 import com.nosz.projectsem2be.exception.UserLoginException;
-import com.nosz.projectsem2be.respository.CartRepository;
-import com.nosz.projectsem2be.respository.InvoiceDetailsRepository;
-import com.nosz.projectsem2be.respository.InvoiceRepository;
-import com.nosz.projectsem2be.respository.UserRepository;
+import com.nosz.projectsem2be.respository.*;
 import com.nosz.projectsem2be.security.jwt.JwtTokenFilter;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +33,8 @@ public class InvoiceService {
     CartRepository cartRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private ProductRepository productRepository;
 
     @Transactional
     public void checkOutOrder(InvoiceDto invoiceDto){
@@ -54,6 +53,9 @@ public class InvoiceService {
                 invoiceDetails.setQuantity(item.getQuantity());
                 invoiceDetails.setInvoice(invoice);
                 invoiceDetails.setProduct(item.getProduct());
+                var volume = item.getProduct().getVolume() + 1L;
+                item.getProduct().setVolume(volume);
+                productRepository.save(item.getProduct());
                 invoiceDetailsRepository.save(invoiceDetails);
                 cartRepository.deleteByUser(user.getId());
             });

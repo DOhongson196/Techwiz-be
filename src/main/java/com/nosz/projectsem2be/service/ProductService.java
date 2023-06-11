@@ -128,9 +128,12 @@ public class ProductService {
                 new ProductException("Not found product id " + id));
         ProductDto dto = new ProductDto();
         BeanUtils.copyProperties(found,dto);
-
         dto.setCategoryId(found.getCategory().getId());
         dto.setManufacturerId(found.getManufacturer().getId());
+
+        var view = found.getViewCount() + 1L;
+        found.setViewCount(view);
+        productRepository.save(found);
 
         return dto;
     }

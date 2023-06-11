@@ -19,6 +19,8 @@ public class ProductDto implements Serializable {
     private Double price;
     @Min(value = 0)
     private Long viewCount;
+    @Min(value = 0)
+    private Long volume;
     private Boolean isFeatured;
     private String description;
     private ProductStatus status;

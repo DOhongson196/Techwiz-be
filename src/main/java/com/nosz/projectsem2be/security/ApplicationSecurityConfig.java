@@ -22,7 +22,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity(prePostEnabled = false, jsr250Enabled = true)
+@EnableMethodSecurity(prePostEnabled = false, jsr250Enabled = true,securedEnabled = true)
 public class ApplicationSecurityConfig {
 
     @Autowired
