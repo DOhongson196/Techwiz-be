@@ -2,6 +2,7 @@ package com.nosz.projectsem2be.service;
 
 import com.nosz.projectsem2be.dto.CategoryDto;
 import com.nosz.projectsem2be.entity.Category;
+import com.nosz.projectsem2be.entity.CategoryStatus;
 import com.nosz.projectsem2be.exception.CategoryException;
 import com.nosz.projectsem2be.respository.CategoryRepository;
 import com.nosz.projectsem2be.respository.ProductRepository;
@@ -51,6 +52,10 @@ public class CategoryService {
 
     public List<Category> findAll() {
         return categoryRepository.findAll();
+    }
+
+    public List<Category> findByStatus() {
+        return categoryRepository.findByStatus(CategoryStatus.Visible);
     }
 
     public Page<Category> findAll(Pageable pageable) {

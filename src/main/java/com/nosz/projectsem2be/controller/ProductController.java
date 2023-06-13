@@ -76,7 +76,7 @@ public class ProductController {
         return new ResponseEntity<>(dto,HttpStatus.CREATED);
     }
 
-    @Secured({"ROLE_CUSTOMER", "ROLE_EDITOR","ROLE_ADMIN"})
+
     @GetMapping()
     public ResponseEntity<?> getProducts(){
         return new ResponseEntity<>(productService.findAll(),HttpStatus.CREATED);
@@ -111,7 +111,7 @@ public class ProductController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @Secured({"ROLE_CUSTOMER", "ROLE_EDITOR","ROLE_ADMIN"})
+
     @GetMapping("/find")
     public ResponseEntity<?> getProductBriefByName(@RequestParam("query") String query,
                                         @PageableDefault(size = 5, sort = "name",direction = Sort.Direction.ASC)
@@ -119,14 +119,19 @@ public class ProductController {
         return new ResponseEntity<>(productService.getProductBriefByName(query,pageable),HttpStatus.OK);
     }
 
-    @Secured({"ROLE_CUSTOMER", "ROLE_EDITOR","ROLE_ADMIN"})
+    @GetMapping("header/find")
+    public ResponseEntity<?> getProductBriefByNameHeader(@RequestParam("query") String query){
+        return new ResponseEntity<>(productService.getProductBriefSearchHeader(query),HttpStatus.OK);
+    }
+
+
+
     @GetMapping("/brief")
     public ResponseEntity<?> getProductBrief(@PageableDefault(size = 5, sort = "name",direction = Sort.Direction.ASC)
                                                    Pageable pageable){
         return new ResponseEntity<>(productService.getProductBrief(pageable),HttpStatus.OK);
     }
 
-    @Secured({"ROLE_CUSTOMER", "ROLE_EDITOR","ROLE_ADMIN"})
     @GetMapping("/{id}")
     public ResponseEntity<?> getProductByid(@PathVariable Long id){
         return new ResponseEntity<>(productService.getProductById(id),HttpStatus.OK);

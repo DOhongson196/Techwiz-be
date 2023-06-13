@@ -32,7 +32,6 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @CrossOrigin(origins= {"*"}, maxAge = 4800, allowCredentials = "false" )
 @RequestMapping("/api/v1/auth")
@@ -63,7 +62,7 @@ public class AuthController {
             return responseEntity;
         }
         if (userService.existByEmail(signUpFormDto.getEmail())) {
-            throw new UserException("Email is existed! pls try again");
+            throw new UserException("Email is exists! please try again");
         }
         User user = new User();
         String[] ignoreFields = new String[]{"password", "roles"};

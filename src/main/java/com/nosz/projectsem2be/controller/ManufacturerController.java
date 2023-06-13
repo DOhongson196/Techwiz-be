@@ -99,7 +99,7 @@ public class ManufacturerController {
                 .body(resource);
     }
 
-    @Secured({"ROLE_CUSTOMER", "ROLE_EDITOR","ROLE_ADMIN"})
+
     @GetMapping
     public ResponseEntity<?> getManufacturers(){
         var list = manufacturerService.findAll();
@@ -111,7 +111,7 @@ public class ManufacturerController {
         return new ResponseEntity<>(newList,HttpStatus.OK);
     }
 
-    @Secured({"ROLE_CUSTOMER", "ROLE_EDITOR","ROLE_ADMIN"})
+
     @GetMapping("/find")
     public ResponseEntity<?> getManufacturers(@RequestParam("query") String query,
             @PageableDefault(size = 5,sort = "name", direction = Sort.Direction.ASC)
@@ -129,7 +129,7 @@ public class ManufacturerController {
         return new ResponseEntity<>(newPage,HttpStatus.OK);
     }
 
-    @Secured({"ROLE_CUSTOMER", "ROLE_EDITOR","ROLE_ADMIN"})
+
     @GetMapping("/page")
     public ResponseEntity<?> getManufacturers(@PageableDefault(size = 5,sort = "name", direction = Sort.Direction.ASC)
                                              Pageable pageable){
@@ -143,7 +143,7 @@ public class ManufacturerController {
         return new ResponseEntity<>(newPage,HttpStatus.OK);
     }
 
-    @Secured({"ROLE_CUSTOMER", "ROLE_EDITOR","ROLE_ADMIN"})
+
     @GetMapping("/{id}")
     public ResponseEntity<?> getManufacturer(@PathVariable Long id){
         var entity = manufacturerService.findById(id);

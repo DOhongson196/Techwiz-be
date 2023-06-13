@@ -51,13 +51,17 @@ public class CategoryController {
     }
 
 
-    @Secured({"ROLE_CUSTOMER", "ROLE_EDITOR","ROLE_ADMIN"})
+
     @GetMapping()
     public ResponseEntity<?> getCategories(){
         return new ResponseEntity<>(categoryService.findAll(),HttpStatus.OK);
     }
+    @GetMapping("/status")
+    public ResponseEntity<?> getCategoriesBtyStatus(){
+        return new ResponseEntity<>(categoryService.findByStatus(),HttpStatus.OK);
+    }
 
-    @Secured({"ROLE_CUSTOMER", "ROLE_EDITOR","ROLE_ADMIN"})
+
     @GetMapping("/page")
     public ResponseEntity<?> getCategories(
             @PageableDefault(size = 5, sort = "name", direction = Sort.Direction.ASC)
@@ -65,7 +69,6 @@ public class CategoryController {
         return new ResponseEntity<>(categoryService.findAll(pageable),HttpStatus.OK);
     }
 
-    @Secured({"ROLE_CUSTOMER", "ROLE_EDITOR","ROLE_ADMIN"})
     @GetMapping("/{id}")
     public ResponseEntity<?> getCategories(@PathVariable("id") Long id){
         return new ResponseEntity<>(categoryService.findById(id),HttpStatus.OK);

@@ -3,9 +3,7 @@ package com.nosz.projectsem2be.service;
 
 import com.nosz.projectsem2be.dto.ProductDto;
 import com.nosz.projectsem2be.dto.ProductDtoBrief;
-import com.nosz.projectsem2be.entity.Category;
-import com.nosz.projectsem2be.entity.Manufacturer;
-import com.nosz.projectsem2be.entity.Product;
+import com.nosz.projectsem2be.entity.*;
 import com.nosz.projectsem2be.exception.ProductException;
 import com.nosz.projectsem2be.respository.InvoiceDetailsRepository;
 import com.nosz.projectsem2be.respository.ProductRepository;
@@ -103,6 +101,20 @@ public class ProductService {
         }).collect(Collectors.toList());
 
         return new PageImpl<>(newList,list.getPageable(), list.getTotalElements());
+    }
+
+    public List<ProductDtoBrief> getProductBriefSearchHeader(String name){
+        var list = productRepository.findByNameContainsAndStatusNotAndCategory_Status(name, ProductStatus.Discontinued, CategoryStatus.Visible);
+
+        return list.stream().map(item -> {
+            ProductDtoBrief dto = new ProductDtoBrief();
+            BeanUtils.copyProperties(item,dto);
+
+            dto.setCategoryName(item.getCategory().getName());
+            dto.setManufacturerName(item.getManufacturer().getName());
+
+            return dto;
+        }).collect(Collectors.toList());
     }
 
 
