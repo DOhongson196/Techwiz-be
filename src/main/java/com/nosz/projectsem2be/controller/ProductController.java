@@ -124,7 +124,20 @@ public class ProductController {
         return new ResponseEntity<>(productService.getProductBriefSearchHeader(query),HttpStatus.OK);
     }
 
+    @GetMapping("/top/view")
+    public ResponseEntity<?> getProductTop10View(){
+        return new ResponseEntity<>(productService.getProductTop10View(),HttpStatus.OK);
+    }
 
+    @GetMapping("/top/buy")
+    public ResponseEntity<?> getProductTop10Buy(){
+        return new ResponseEntity<>(productService.getProductTop10Buy(),HttpStatus.OK);
+    }
+
+    @GetMapping("/top/featured")
+    public ResponseEntity<?> getProductTop10Featured(){
+        return new ResponseEntity<>(productService.getProductTop10Featured(),HttpStatus.OK);
+    }
 
     @GetMapping("/brief")
     public ResponseEntity<?> getProductBrief(@PageableDefault(size = 5, sort = "name",direction = Sort.Direction.ASC)
@@ -133,7 +146,12 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getProductByid(@PathVariable Long id){
+    public ResponseEntity<?> getProductById(@PathVariable Long id){
         return new ResponseEntity<>(productService.getProductById(id),HttpStatus.OK);
+    }
+
+    @GetMapping("/brief/{id}")
+    public ResponseEntity<?> getProductBriefById(@PathVariable Long id){
+        return new ResponseEntity<>(productService.getProductBriefById(id),HttpStatus.OK);
     }
 }

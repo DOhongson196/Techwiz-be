@@ -90,6 +90,10 @@ public class ProductService {
     public Page<ProductDtoBrief> getProductBriefByName(String name, Pageable pageable){
         var list = productRepository.findByNameContainsIgnoreCase(name,pageable);
 
+        return getProductDtoBriefs(list);
+    }
+
+    private Page<ProductDtoBrief> getProductDtoBriefs(Page<Product> list) {
         var newList = list.stream().map(item -> {
             ProductDtoBrief dto = new ProductDtoBrief();
             BeanUtils.copyProperties(item,dto);
@@ -106,6 +110,10 @@ public class ProductService {
     public List<ProductDtoBrief> getProductBriefSearchHeader(String name){
         var list = productRepository.findByNameContainsAndStatusNotAndCategory_Status(name, ProductStatus.Discontinued, CategoryStatus.Visible);
 
+        return getProductDtoBriefs(list);
+    }
+
+    private List<ProductDtoBrief> getProductDtoBriefs(List<Product> list) {
         return list.stream().map(item -> {
             ProductDtoBrief dto = new ProductDtoBrief();
             BeanUtils.copyProperties(item,dto);
@@ -117,21 +125,28 @@ public class ProductService {
         }).collect(Collectors.toList());
     }
 
+    public List<ProductDtoBrief> getProductTop10View(){
+        var list = productRepository.selectTop10View();
+
+        return getProductDtoBriefs(list);
+    }
+
+    public List<ProductDtoBrief> getProductTop10Buy(){
+        var list = productRepository.selectTop10Buy();
+
+        return getProductDtoBriefs(list);
+    }
+
+    public List<ProductDtoBrief> getProductTop10Featured(){
+        var list = productRepository.selectTop10Featured();
+
+        return getProductDtoBriefs(list);
+    }
 
     public Page<ProductDtoBrief> getProductBrief( Pageable pageable){
         var list = productRepository.findAll(pageable);
 
-        var newList = list.stream().map(item -> {
-            ProductDtoBrief dto = new ProductDtoBrief();
-            BeanUtils.copyProperties(item,dto);
-
-            dto.setCategoryName(item.getCategory().getName());
-            dto.setManufacturerName(item.getManufacturer().getName());
-
-            return dto;
-        }).collect(Collectors.toList());
-
-        return new PageImpl<>(newList,list.getPageable(), list.getTotalElements());
+        return getProductDtoBriefs(list);
     }
 
     public ProductDto getProductById(Long id){
@@ -141,6 +156,21 @@ public class ProductService {
         BeanUtils.copyProperties(found,dto);
         dto.setCategoryId(found.getCategory().getId());
         dto.setManufacturerId(found.getManufacturer().getId());
+
+        var view = found.getViewCount() + 1L;
+        found.setViewCount(view);
+        productRepository.save(found);
+
+        return dto;
+    }
+
+    public ProductDtoBrief getProductBriefById(Long id){
+        var found = productRepository.findById(id).orElseThrow(() ->
+                new ProductException("Not found product id " + id));
+        ProductDtoBrief dto = new ProductDtoBrief();
+        BeanUtils.copyProperties(found,dto);
+        dto.setCategoryName(found.getCategory().getName());
+        dto.setManufacturerName(found.getManufacturer().getName());
 
         var view = found.getViewCount() + 1L;
         found.setViewCount(view);

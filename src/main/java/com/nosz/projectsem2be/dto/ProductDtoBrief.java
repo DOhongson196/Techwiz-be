@@ -17,6 +17,7 @@ public class ProductDtoBrief implements Serializable {
     private String name;
     private Double price;
     private Long viewCount;
+    private Long volume;
     private Boolean isFeatured;
     private ProductStatus status;
     private String image;
