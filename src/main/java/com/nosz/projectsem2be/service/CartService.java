@@ -35,6 +35,7 @@ public class CartService {
         List<CartItemDto> cartDtoList = new ArrayList<>();
         cartList.forEach(item -> {
             CartItemDto cartDto = new CartItemDto();
+            cartDto.setId(item.getProduct().getId());
             cartDto.setSubTotal(item.getSubtotal());
             cartDto.setDiscount(item.getProduct().getDiscount());
             cartDto.setImage(item.getProduct().getImage());

@@ -16,7 +16,7 @@ public class CartController {
 
     @Secured({"ROLE_CUSTOMER"})
     @GetMapping("/{id}")
-    public ResponseEntity<?> addToCart(@PathVariable Long id){
+    public ResponseEntity<?> addToCart(@PathVariable("id") Long id){
         return new ResponseEntity<>(cartService.addToCart(id), HttpStatus.OK);
     }
 
@@ -27,7 +27,7 @@ public class CartController {
     }
 
     @Secured({"ROLE_CUSTOMER"})
-    @PostMapping("/{id}/{quantity}")
+    @GetMapping("/{id}/{quantity}")
     public ResponseEntity<?> updateQuantity(@PathVariable("id") Long id,@PathVariable("quantity") Integer quantity){
         return new ResponseEntity<>(cartService.updateQuantity(quantity,id), HttpStatus.OK);
     }
