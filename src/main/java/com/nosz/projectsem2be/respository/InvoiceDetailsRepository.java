@@ -10,7 +10,6 @@ public interface InvoiceDetailsRepository extends JpaRepository<InvoiceDetails, 
     boolean existsByProduct_Id(Long id);
     List<InvoiceDetails> findByInvoice_Id(Long id, Pageable pageable);
 
-    List<InvoiceDetails> findByInvoice_User_Email(String email,Pageable pageable);
 
 
 

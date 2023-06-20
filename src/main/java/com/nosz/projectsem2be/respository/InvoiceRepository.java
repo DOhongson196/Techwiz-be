@@ -20,5 +20,9 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Long> {
     @Query("select i from Invoice i where upper(i.user.email) like upper(concat('%', ?1, '%')) and i.invoiceStatus in ?2")
     List<Invoice> findByUser_EmailContainsIgnoreCaseOrInvoiceStatus(String email,Collection<InvoiceStatus> invoiceStatus, Pageable pageable);
 
+    List<Invoice> findByEmail(String email, Pageable pageable);
+
+
+
 
 }

@@ -26,7 +26,7 @@ public class InvoiceController {
     @Autowired
     private MapValidationErrorService mapValidationErrorService;
 
-    @Secured({"ROLE_ADMIN"})
+    @Secured({"ROLE_CUSTOMER"})
     @PostMapping
     public ResponseEntity<?> placeOrder(@Valid  @RequestBody InvoiceDto invoiceDto, BindingResult bindingResult) {
         ResponseEntity<?> responseEntity = mapValidationErrorService.mapValidationFields(bindingResult);

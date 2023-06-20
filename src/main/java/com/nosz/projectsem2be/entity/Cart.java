@@ -30,7 +30,7 @@ public class Cart extends AbstractEntity {
     @Transient
     public double getSubtotal(){
         if(this.product.getDiscount() != 0){
-            return (this.product.getPrice()*((100-this.product.getDiscount())/100)) * quantity;
+            return Math.round((this.product.getPrice()*((100-this.product.getDiscount())/100)) * quantity);
         }else{
             return this.product.getPrice()*quantity;
         }

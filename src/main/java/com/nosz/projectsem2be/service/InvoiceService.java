@@ -91,7 +91,7 @@ public class InvoiceService {
     }
 
     public InvoiceDto findById(Long id) {
-        var found  =  invoiceRepository.findById(id).orElseThrow(() -> new CategoryException("Category id " + id + " does not existed"));
+        var found  =  invoiceRepository.findById(id).orElseThrow(() -> new InvoiceException("Invoice id " + id + " does not existed"));
         InvoiceDto invoiceDto = new InvoiceDto();
         BeanUtils.copyProperties(found,invoiceDto);
 
@@ -116,17 +116,12 @@ public class InvoiceService {
         String email = JwtTokenFilter.CURRENT_USER;
         userRepository.findByEmail(email).orElseThrow(() ->
                 new UserLoginException("You must login before!"));
-        var list = invoiceDetailsRepository.findByInvoice_User_Email(email,pageable);
-        List<OrderDetailCusDto> listDto = new ArrayList<>();
+        var list = invoiceRepository.findByEmail(email,pageable);
+        List<InvoiceDto> listDto = new ArrayList<>();
         list.forEach(item -> {
-            OrderDetailCusDto invoiceDetailsDto = new OrderDetailCusDto();
-            invoiceDetailsDto.setDiscount(item.getProduct().getDiscount());
-            invoiceDetailsDto.setQuantity(item.getQuantity());
-            invoiceDetailsDto.setSubTotal(item.getSubtotal());
-            invoiceDetailsDto.setNameProduct(item.getProduct().getName());
-            invoiceDetailsDto.setPrice(item.getProduct().getPrice());
-            invoiceDetailsDto.setInvoiceStatus(item.getInvoice().getInvoiceStatus());
-            listDto.add(invoiceDetailsDto);
+            InvoiceDto invoiceDto = new InvoiceDto();
+            BeanUtils.copyProperties(item,invoiceDto);
+            listDto.add(invoiceDto);
         });
         return new PageImpl<>(listDto);
     }
