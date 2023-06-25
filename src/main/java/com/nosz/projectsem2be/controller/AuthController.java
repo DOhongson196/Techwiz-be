@@ -1,5 +1,6 @@
 package com.nosz.projectsem2be.controller;
 
+import com.nosz.projectsem2be.dto.ResetPassDto;
 import com.nosz.projectsem2be.dto.SignUpFormDto;
 import com.nosz.projectsem2be.dto.UserRequestDto;
 import com.nosz.projectsem2be.dto.UserResponseDto;
@@ -151,6 +152,14 @@ public class AuthController {
         return new ResponseEntity<>("Refresh success", HttpStatus.OK);
     }
 
+    @GetMapping("/pin")
+    public ResponseEntity<?> forgotPassword(@RequestParam("email") String email){
+        return new ResponseEntity<>(confirmTokenService.createTokenResetPass(email),HttpStatus.OK);
+    }
 
+    @PostMapping("/pin")
+    public ResponseEntity<?> resetPassword(@RequestBody ResetPassDto resetPassDto){
+        return new ResponseEntity<>(confirmTokenService.checkPinCode(resetPassDto),HttpStatus.OK);
+    }
 
 }

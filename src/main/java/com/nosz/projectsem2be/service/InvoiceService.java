@@ -2,12 +2,10 @@ package com.nosz.projectsem2be.service;
 
 import com.nosz.projectsem2be.dto.InvoiceDetailsDto;
 import com.nosz.projectsem2be.dto.InvoiceDto;
-import com.nosz.projectsem2be.dto.OrderDetailCusDto;
 import com.nosz.projectsem2be.entity.Invoice;
 import com.nosz.projectsem2be.entity.InvoiceDetails;
 import com.nosz.projectsem2be.entity.InvoiceStatus;
 import com.nosz.projectsem2be.exception.CartException;
-import com.nosz.projectsem2be.exception.CategoryException;
 import com.nosz.projectsem2be.exception.InvoiceException;
 import com.nosz.projectsem2be.exception.UserLoginException;
 import com.nosz.projectsem2be.respository.*;
@@ -70,15 +68,13 @@ public class InvoiceService {
         list.forEach(item -> {
             InvoiceDto invoiceDto = new InvoiceDto();
             BeanUtils.copyProperties(item,invoiceDto);
-            invoiceDto.setUserId(item.getUser().getId());
-            invoiceDto.setAccountName(item.getUser().getEmail());
             listDto.add(invoiceDto);
         });
-        return new PageImpl<>(listDto);
+        return new PageImpl<>(listDto,list.getPageable(),list.getTotalPages());
     }
 
     public Page<?> getAllOrderByStatus(String email,List<InvoiceStatus> invoiceStatus,Pageable pageable){
-        var list = invoiceRepository.findByUser_EmailContainsIgnoreCaseOrInvoiceStatus(email,invoiceStatus,pageable);
+        var list = invoiceRepository.findByUser_EmailContainsIgnoreCaseAndInvoiceStatusIn(email,invoiceStatus,pageable);
         List<InvoiceDto> listDto = new ArrayList<>();
         list.forEach(item -> {
             InvoiceDto invoiceDto = new InvoiceDto();
@@ -87,7 +83,7 @@ public class InvoiceService {
             invoiceDto.setAccountName(item.getUser().getEmail());
             listDto.add(invoiceDto);
         });
-        return new PageImpl<>(listDto);
+        return new PageImpl<>(listDto,list.getPageable(),list.getTotalPages());
     }
 
     public InvoiceDto findById(Long id) {
@@ -98,32 +94,19 @@ public class InvoiceService {
         return invoiceDto;
     }
 
-    public Page<InvoiceDto> getOrderByUserEmail(String email, Pageable pageable){
-        var list = invoiceRepository.findByUser_EmailContainsIgnoreCase(email, pageable);
-
-        List<InvoiceDto> listDto = new ArrayList<>();
-        list.forEach(item -> {
-            InvoiceDto invoiceDto = new InvoiceDto();
-            BeanUtils.copyProperties(item,invoiceDto);
-            invoiceDto.setUserId(item.getUser().getId());
-            invoiceDto.setAccountName(item.getUser().getEmail());
-            listDto.add(invoiceDto);
-        });
-        return new PageImpl<>(listDto);
-    }
 
     public Page<?> getOrderByUser(Pageable pageable){
         String email = JwtTokenFilter.CURRENT_USER;
         userRepository.findByEmail(email).orElseThrow(() ->
                 new UserLoginException("You must login before!"));
-        var list = invoiceRepository.findByEmail(email,pageable);
+        var list = invoiceRepository.findByUser_Email(email,pageable);
         List<InvoiceDto> listDto = new ArrayList<>();
         list.forEach(item -> {
             InvoiceDto invoiceDto = new InvoiceDto();
             BeanUtils.copyProperties(item,invoiceDto);
             listDto.add(invoiceDto);
         });
-        return new PageImpl<>(listDto);
+        return new PageImpl<>(listDto,list.getPageable(),list.getTotalPages());
     }
 
     public Page<?> getOrderDetailByOrderId(Pageable pageable,Long orderId){
@@ -138,7 +121,7 @@ public class InvoiceService {
             invoiceDetailsDto.setPrice(item.getProduct().getPrice());
             listDto.add(invoiceDetailsDto);
         });
-        return new PageImpl<>(listDto);
+        return new PageImpl<>(listDto,list.getPageable(),list.getTotalPages());
     }
 
     @Transactional

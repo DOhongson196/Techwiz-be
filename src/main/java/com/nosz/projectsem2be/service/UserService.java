@@ -7,6 +7,7 @@ import com.nosz.projectsem2be.entity.User;
 import com.nosz.projectsem2be.exception.UserException;
 import com.nosz.projectsem2be.respository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -48,6 +49,14 @@ public class UserService {
 
     public int enableUser(String email){
         return userRepository.enableUser(email);
+    }
+
+    public void updatePassword(String email, String newPassword) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String encodedPassword = passwordEncoder.encode(newPassword);
+        var user = userRepository.findUserByEmail(email);
+        user.setPassword(encodedPassword);
+        userRepository.save(user);
     }
 
     public void createNewUserOAuthLogin(String email, String name, AuthProvider authProvider) {

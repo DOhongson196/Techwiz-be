@@ -1,13 +1,16 @@
 package com.nosz.projectsem2be.service;
 
+import com.nosz.projectsem2be.dto.ResetPassDto;
 import com.nosz.projectsem2be.entity.ConfirmToken;
 import com.nosz.projectsem2be.exception.ConfirmTokenException;
+import com.nosz.projectsem2be.exception.UserException;
 import com.nosz.projectsem2be.respository.ConfirmTokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Random;
 
 @Service
 public class ConfirmTokenService {
@@ -15,6 +18,7 @@ public class ConfirmTokenService {
     ConfirmTokenRepository confirmTokenRepository;
     @Autowired
     UserService userService;
+
 
     public void saveConfirmToken(ConfirmToken confirmToken){
         confirmTokenRepository.save(confirmToken);
@@ -109,6 +113,40 @@ public class ConfirmTokenService {
                 "  </tbody></table><div class=\"yj6qo\"></div><div class=\"adL\">\n" +
                 "\n" +
                 "</div></div>";
+    }
+
+    public String createTokenResetPass(String email){
+        Random random = new Random();
+        StringBuilder sb = new StringBuilder();
+        var user = userService.getUser(email);
+        if(user == null){
+            throw new UserException("Email does not exist");
+        }
+
+        for (int i = 0; i < 6; i++) {
+            int randomNumber = random.nextInt(9) + 1;
+            sb.append(randomNumber);
+        }
+
+        ConfirmToken confirmToken = new ConfirmToken(sb.toString(), LocalDateTime.now(), LocalDateTime.now().plusMinutes(30),user);
+        deleteOldToken(email);
+        confirmTokenRepository.save(confirmToken);
+
+        return confirmToken.getToken();
+    }
+
+    public String checkPinCode(ResetPassDto resetPassDto){
+        ConfirmToken confirmToken = confirmTokenRepository.findByUser_EmailAndToken(resetPassDto.getEmail(),resetPassDto.getToken());
+        if(confirmToken == null){
+            throw new ConfirmTokenException("Incorrect pin code");
+        }
+
+        LocalDateTime expireAt = confirmToken.getExpireAt();
+        if(expireAt.isBefore(LocalDateTime.now())){
+            throw new ConfirmTokenException("Pin code expired");
+        }
+        userService.updatePassword(resetPassDto.getEmail(),resetPassDto.getPassword());
+        return "Update pass successfully";
     }
 
 }

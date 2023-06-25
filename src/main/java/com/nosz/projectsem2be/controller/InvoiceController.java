@@ -84,14 +84,9 @@ public class InvoiceController {
         return new ResponseEntity<>(invoiceService.updateOrder(id,invoiceDto),HttpStatus.OK);
     }
 
-    @GetMapping("/find1")
-    public ResponseEntity<?> getInvoiceByName(@RequestParam("query") String query,
-                                                   @PageableDefault(size = 5, sort = "id",direction = Sort.Direction.ASC)
-                                                   Pageable pageable){
-        return new ResponseEntity<>(invoiceService.getOrderByUserEmail(query,pageable),HttpStatus.OK);
-    }
 
-    @GetMapping("/find2")
+    @Secured({"ROLE_ADMIN"})
+    @GetMapping("/find")
     public ResponseEntity<?> getInvoiceByNameAndInvoiceStatus(@RequestParam("query") String query,
                                                               @RequestParam("status") InvoiceStatus[] status,
                                               @PageableDefault(size = 5, sort = "id",direction = Sort.Direction.ASC)

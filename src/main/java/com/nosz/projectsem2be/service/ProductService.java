@@ -62,7 +62,7 @@ public class ProductService {
     public ProductDto updateProduct(Long id, ProductDto dto){
         var founded = productRepository.findById(id).orElseThrow(() ->
                 new ProductException("Not found product"));
-        String [] ignoreFields = new String[]{"createdDate","image","sizes","viewCount"};
+        String [] ignoreFields = new String[]{"createdDate","image","sizes","viewCount","volume"};
         String preImage = founded.getImage();
         BeanUtils.copyProperties(dto,founded,ignoreFields);
         if(dto.getImage() != null){
@@ -131,8 +131,27 @@ public class ProductService {
         return getProductDtoBriefs(list);
     }
 
+    public Page<ProductDtoBrief> getProductsByCategories(String query,Long id,Double start,Double end,Pageable pageable){
+        var list = productRepository.findByStatusNotAndCategory_IdAndNameContainsIgnoreCaseAndPriceBetween(ProductStatus.Discontinued,id,query,start,end,pageable);
+        //var newList = getProductDtoBriefs(list);
+        return getProductDtoBriefs(list);
+    }
+
     public List<ProductDtoBrief> getProductTop10Buy(){
         var list = productRepository.selectTop10Buy();
+
+        return getProductDtoBriefs(list);
+    }
+
+
+    public List<ProductDtoBrief> getProductTopView(){
+        var list = productRepository.selectTopView();
+
+        return getProductDtoBriefs(list);
+    }
+
+    public List<ProductDtoBrief> getProductTopBuy(){
+        var list = productRepository.selectTopBuy();
 
         return getProductDtoBriefs(list);
     }

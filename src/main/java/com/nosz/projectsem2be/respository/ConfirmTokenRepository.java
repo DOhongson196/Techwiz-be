@@ -10,6 +10,12 @@ public interface ConfirmTokenRepository extends JpaRepository<ConfirmToken, Long
 
     ConfirmToken findByUser_Email(String email);
 
+    ConfirmToken findByUser_EmailAndToken(String email, String token);
+
+
+
+
+
 
 
 }

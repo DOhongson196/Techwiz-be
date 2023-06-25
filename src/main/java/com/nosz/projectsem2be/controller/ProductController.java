@@ -119,6 +119,16 @@ public class ProductController {
         return new ResponseEntity<>(productService.getProductBriefByName(query,pageable),HttpStatus.OK);
     }
 
+    @GetMapping("/find/menu")
+    public ResponseEntity<?> getProductBriefByName(@RequestParam("query") String query,
+                                                   @RequestParam("id") Long id,
+                                                   @RequestParam("pricestart") Double priceStart,
+                                                   @RequestParam("priceend") Double priceEnd,
+                                                   @PageableDefault(size = 12, sort = "name",direction = Sort.Direction.ASC)
+                                                   Pageable pageable){
+        return new ResponseEntity<>(productService.getProductsByCategories(query,id,priceStart,priceEnd,pageable),HttpStatus.OK);
+    }
+
     @GetMapping("header/find")
     public ResponseEntity<?> getProductBriefByNameHeader(@RequestParam("query") String query){
         return new ResponseEntity<>(productService.getProductBriefSearchHeader(query),HttpStatus.OK);
@@ -132,6 +142,16 @@ public class ProductController {
     @GetMapping("/top/buy")
     public ResponseEntity<?> getProductTop10Buy(){
         return new ResponseEntity<>(productService.getProductTop10Buy(),HttpStatus.OK);
+    }
+
+    @GetMapping("/rank/view")
+    public ResponseEntity<?> getProductTopView(){
+        return new ResponseEntity<>(productService.getProductTopView(),HttpStatus.OK);
+    }
+
+    @GetMapping("/rank/buy")
+    public ResponseEntity<?> getProductTopBuy(){
+        return new ResponseEntity<>(productService.getProductTopBuy(),HttpStatus.OK);
     }
 
     @GetMapping("/top/featured")
