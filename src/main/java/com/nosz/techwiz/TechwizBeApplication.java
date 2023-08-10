@@ -7,10 +7,10 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication
 @EnableTransactionManagement
-public class ProjectSem2BeApplication extends SpringBootServletInitializer {
+public class TechwizBeApplication extends SpringBootServletInitializer {
 
     public static void main(String[] args) {
-        SpringApplication.run(ProjectSem2BeApplication.class, args);
+        SpringApplication.run(TechwizBeApplication.class, args);
     }
 
 }
