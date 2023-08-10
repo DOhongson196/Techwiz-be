@@ -1,12 +1,14 @@
 package com.nosz.techwiz.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -23,5 +25,13 @@ public class Team extends AbstractEntity {
 
     @Column(name = "logo")
     private String logo;
-
+    @Column(name = "description")
+    private String description;
+    @OneToOne(orphanRemoval = true)
+    @JoinColumn(name = "homeYardId")
+    private Stadium homeYardId;
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
 }
