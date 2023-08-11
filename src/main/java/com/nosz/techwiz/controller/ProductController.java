@@ -147,4 +147,9 @@ public class ProductController {
     public ResponseEntity<?> getProductBriefById(@PathVariable Long id){
         return new ResponseEntity<>(productService.getProductBriefById(id),HttpStatus.OK);
     }
+
+    @GetMapping("/top/featured")
+    public ResponseEntity<?> getProductTop10Featured(){
+        return new ResponseEntity<>(productService.getProductTop10Featured(),HttpStatus.OK);
+    }
 }

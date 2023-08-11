@@ -19,6 +19,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     Page<Product> findByNameContainsIgnoreCase(String name, Pageable pageable);
 
+
+
     Page<Product> findByStatusNotAndCategory_IdAndNameContainsIgnoreCaseAndPriceBetween(ProductStatus status, Long id, String name, Double priceStart, Double priceEnd, Pageable pageable);
 
     boolean existsByCategory_Id(Long id);
@@ -26,4 +28,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     List<Product> findByNameContainsAndStatusNotAndCategory_Status(String name, ProductStatus status, CategoryStatus status1);
 
+    @Query(value = "SELECT p.* FROM Product p INNER JOIN Category c on p.category_id = c.id where p.is_featured = 1 and c.status = 0 and p.status <> 2 order by p.create_date DESC Limit 10",nativeQuery = true)
+    @Modifying
+    List<Product> selectTop10Featured();
 }

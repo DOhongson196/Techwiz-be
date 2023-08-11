@@ -32,4 +32,7 @@ public class Player extends AbstractEntity {
     @JoinColumn(name = "team_id")
     private Team team;
 
+    @Column(name = "image")
+    private String image;
+
 }

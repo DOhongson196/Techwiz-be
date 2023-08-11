@@ -171,4 +171,9 @@ public class ProductService {
         productRepository.delete(found);
     }
 
+    public List<ProductDtoBrief> getProductTop10Featured(){
+        var list = productRepository.selectTop10Featured();
+
+        return getProductDtoBriefs(list);
+    }
 }

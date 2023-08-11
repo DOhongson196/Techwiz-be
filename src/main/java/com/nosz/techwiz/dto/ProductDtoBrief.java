@@ -10,8 +10,7 @@ public class ProductDtoBrief implements Serializable {
     private Long id;
     private String name;
     private Double price;
-    private Long viewCount;
-    private Long volume;
+    private Long quantity;
     private Boolean isFeatured;
     private ProductStatus status;
     private String image;
