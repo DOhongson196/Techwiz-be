@@ -49,5 +49,5 @@ jobs:
         with:
           app-name: 'themeteorite'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_1DECA4839D424439AB3B011C42933E13 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_77280A78539547DEA45AFE3D215DB061 }}
           package: '*.jar'
