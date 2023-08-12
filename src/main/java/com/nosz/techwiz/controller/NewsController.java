@@ -13,7 +13,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+/**/
 @RestController
 @RequestMapping("/api/v1/news")
 public class NewsController {
