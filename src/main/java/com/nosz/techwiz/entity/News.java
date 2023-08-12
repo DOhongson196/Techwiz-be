@@ -14,32 +14,33 @@ import java.util.Date;
 @Setter
 @Entity
 @Table(name = "news")
-public class News extends AbstractEntity {
-    @Column(name = "title")
+public class News extends BaseEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id" , nullable = false)
+    private Long id;
+
+
+    @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(name = "description")
+
+    @Column(name = "description", nullable = false)
     private String description;
 
-    @Column(name = "thumbnail")
+
+    @Column(name = "content", nullable = false)
+    private String content;
+
+
+    @Column(name ="thumbnail", nullable = false)
     private String thumbnail;
 
-    @Temporal(TemporalType.DATE)
-    @Column(name = "create_date")
-    private Date createDate;
+    @ManyToOne
+    @JoinColumn(name = "type_news")
+    private TypeNews typeNews;
 
-    @Temporal(TemporalType.DATE)
-    @Column(name = "update_date")
-    private Date updateDate;
 
-    @PrePersist
-    public void prePersist() {
-        createDate = new Date();
-    }
-
-    @PreUpdate
-    public void preUpdate() {
-        updateDate = new Date();
-    }
 
 }
