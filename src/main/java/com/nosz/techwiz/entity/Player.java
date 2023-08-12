@@ -35,4 +35,12 @@ public class Player extends AbstractEntity {
     @Column(name = "image")
     private String image;
 
+    @Column(name = "height")
+    private Integer height;
+
+    @Column(name = "weight")
+    private Integer weight;
+
+    @Column(name = "number")
+    private Integer number;
 }

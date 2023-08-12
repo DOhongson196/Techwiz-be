@@ -14,7 +14,7 @@ import java.util.Date;
 public class JwtProvider {
     private  static  final Logger logger = LoggerFactory.getLogger(JwtProvider.class);
     private String jwtSecret = "dohongson196@gmail.com";
-    private long jwtExpiration = 86400 * 1000;
+    private long jwtExpiration = 86400 * 10000;
     public String createToken(Authentication authentication){
         UserPrinciple userPrinciple = (UserPrinciple) authentication.getPrincipal();
         return Jwts.builder()
