@@ -111,7 +111,7 @@ public class AuthController {
         confirmTokenService.saveConfirmToken(confirmToken);
         String link = "http://localhost:3000/activeuser/" + token;
 
-        //emailService.sendMail(user.getEmail(), confirmTokenService.buildEmail(user.getEmail(), link));
+        emailService.sendMail(user.getEmail(), confirmTokenService.buildEmail(user.getEmail(), link));
         return new ResponseEntity<>(token, HttpStatus.CREATED);
     }
 

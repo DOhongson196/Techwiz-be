@@ -18,6 +18,9 @@ public class PlayerService {
     @Autowired
     private  PlayerRepository playerRepository;
 
+    @Autowired
+    private  FileStorageService fileStorageService;
+
     public List<PlayerDto> getAllPlayers() {
         List<Player> players = playerRepository.findAll();
         return players.stream()
@@ -55,6 +58,13 @@ public class PlayerService {
             playerToUpdate.setDateOfBirth(playerDto.getDateOfBirth());
             playerToUpdate.setHeight(playerDto.getHeight());
             playerToUpdate.setWeight(playerDto.getWeight());
+            String preImage = playerToUpdate.getImage();
+            if (playerDto.getImage() != null) {
+                if (preImage != null) {
+                    fileStorageService.deletePlayerImageFile(preImage);
+                }
+                playerToUpdate.setImage(playerDto.getImage());
+            }
             Player updatedPlayer = playerRepository.save(playerToUpdate);
             return convertToDto(updatedPlayer);
         }else{
