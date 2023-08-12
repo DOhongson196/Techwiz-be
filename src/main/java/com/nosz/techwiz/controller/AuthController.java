@@ -148,7 +148,7 @@ public class AuthController {
         confirmTokenService.saveConfirmToken(confirmToken);
         String link = "http://localhost:3000/activeuser/" + token;
 
-        emailService.sendMail(email, confirmTokenService.buildEmail(email, link));
+         emailService.sendMail(email, confirmTokenService.buildEmail(email, link));
         return new ResponseEntity<>("Refresh success", HttpStatus.OK);
     }
 
