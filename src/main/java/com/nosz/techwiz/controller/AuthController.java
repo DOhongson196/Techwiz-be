@@ -109,7 +109,7 @@ public class AuthController {
         String token = UUID.randomUUID().toString();
         ConfirmToken confirmToken = new ConfirmToken(token, LocalDateTime.now(), LocalDateTime.now().plusMinutes(30), user);
         confirmTokenService.saveConfirmToken(confirmToken);
-        String link = "http://localhost:3000/activeuser/" + token;
+        String link = "https://techwiz-client.vercel.app/activeuser/" + token;
 
         emailService.sendMail(user.getEmail(), confirmTokenService.buildEmail(user.getEmail(), link));
         return new ResponseEntity<>(token, HttpStatus.CREATED);
@@ -146,7 +146,7 @@ public class AuthController {
         ConfirmToken confirmToken = new ConfirmToken(token, LocalDateTime.now(), LocalDateTime.now().plusMinutes(30), user);
         confirmTokenService.deleteOldToken(email);
         confirmTokenService.saveConfirmToken(confirmToken);
-        String link = "http://localhost:3000/activeuser/" + token;
+        String link = "https://techwiz-client.vercel.app/activeuser/" + token;
 
          emailService.sendMail(email, confirmTokenService.buildEmail(email, link));
         return new ResponseEntity<>("Refresh success", HttpStatus.OK);
